@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PolyWeb Code Playground</title>
+    <style>
+        :root {
+    --primary-color: #00ffff; /* Cyan */
+    --secondary-color: #00bcd4; /* Slightly darker cyan */
+    --background-color: #000000; /* Deep black */
+    --text-color: #00ffff; /* Cyan text */
+    --border-color: #00ffff; /* Cyan borders */
+    --card-background: #121212; /* Darker background for card */
+    --button-hover: #00bcd4; /* Slightly darker cyan on hover */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background-color: black;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.logo span {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+nav {
+    flex-grow: 1;
+    text-align: center;
+}
+
+
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: var(--primary-color);
+}
+
+main {
+    display: flex;
+    flex-grow: 1;
+    padding: 2rem;
+    gap: 2rem;
+}
+
+.playground {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.code-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+textarea {
+    width: 100%;
+    height: 200px;
+    resize: vertical;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+}
+
+button {
+    padding: 0.75rem 1rem;
+    background-color: var(--primary-color);
+    color: #121212;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--button-hover);
+}
+
+#output {
+    width: 100%;
+    height: 300px;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--card-background);
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+.sidebar {
+    width: 300px;
+}
+
+.card {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    font-size: 1.25rem;
+}
+
+.card ul {
+    padding-left: 1.5rem;
+}
+
+.card li {
+    margin-bottom: 0.5rem;
+}
+
+.achievement {
+    background-color: #252525;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 6px;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.achievement h3 {
+    margin-bottom: 0.5rem;
+    color: var(--secondary-color);
+}
+
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+    }
+    .container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    nav {
+        width: 100%;
+    }
+    nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+.OTS{
+    --card-background: #eeeeee;
+}
+
+textarea.html, textarea.css, textarea.js {
+    background-color: #000000; /* Black background */
+    color: #00ffff; /* Cyan text */
+    border: 1px solid var(--border-color);
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+}
+
+/* Navbar css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #121212;
+    padding: 15px 50px;
+    border: none;
+    border-radius: 20px;
+    height: 70px;
+    position: relative;
+    box-shadow: 0px 10px 15px rgba(0, 255, 255, 0.6); /* Neon cyan shadow */
+    border-bottom: 2px solid rgba(0, 255, 255, 0.8); /* Add cyan blue bottom border */
+
+}
+
+.navbar:hover {
+    box-shadow: 0px 4px 20px rgba(0, 255, 255, 1);
+    border-bottom: 2px solid rgba(0, 255, 255, 1);
+}
+
+.logo {
+    font-size: 24px;
+}
+
+.logo .poly {
+    color: white;
+    font-weight: bold;
+}
+
+.logo .web {
+    color: cyan;
+    font-weight: bold;
+}
+
+/* Flexbox for nav-links */
+.nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    margin-left: 10rem;
+}
+
+.nav-links li {
+    margin: 0 20px;
+    margin-right: 100px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 8px 16px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-links a:hover {
+    background-color: rgba(0, 255, 255, 1);
+    border-radius: 5px;
+}
+
+/* Adjust the account-section layout */
+.account-section {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adds space between the icons and buttons */
+    position: relative;
+
+}
+
+
+
+.account-section img {
+        border: 2px solid #00ffff; /* Neon cyan border */
+        transition: transform 0.3s ease;
+    }
+
+/* Icon Styling */
+.account-section i {
+    color: white;
+    font-size: 30px;
+}
+
+/* Logout Button */
+.logout-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Back Button Styling */
+.back-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+    gap: 10px;
+}
+
+.back-btn i {
+    font-size: 18px;
+}
+
+.back-btn:hover {
+    background-color: #2980b9;
+}
+
+.account-section {
+    display: dlex;
+    align-items: center;
+}
+
+.account-section i {
+    color: white;
+    font-size: 30px;
+    margin-right: 10px;
+}
+
+.logout-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Dropdown Item Styling */
+/* Dropdown Item Styling */
+.dropdown-item {
+    color: #ffffff; /* White text color for visibility */
+    padding: 5px 10px; /* Increased padding for more space */
+    font-size: 1.1rem; /* Slightly larger font size */
+    text-decoration: none; /* Remove underline */
+    display: block; /* Block display for items */
+    border-radius: 5px;
+}
+.dropdown-item-Logout {
+    color: #ffffff; /* White text color for visibility */
+    padding: 5px 10px; /* Increased padding for more space */
+    font-size: 1.1rem; /* Slightly larger font size */
+    text-decoration: none; /* Remove underline */
+    display: block; /* Block display for items */
+    border-radius: 5px;
+}
+
+/* Dropdown Item Hover State */
+/* Dropdown Item Hover State */
+.dropdown-item:hover {
+    background-color: rgba(0, 8, 8, 0.575); /* Light transparent background on hover */
+    color: cyan; /* White text on hover */
+}
+
+.dropdown-item-Logout:hover {
+    background-color: rgb(255, 76, 91); /* Light transparent background on hover */
+    color: #121212; /* White text on hover */
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-menu {
+    display: block; /* Show dropdown when hovered */
+    border-color: rgba(126, 253, 236, 0.8); /* Outline color for dropdown */
+    animation: neonEffect 1.5s infinite alternate; /* Apply the neon effect */
+}
+
+/* Back Button Styling */
+.back-btn {
+    background-color: #121212; /* Same color as the navbar */
+    color: #fff; /* Text color */
+    border: none;
+    padding: 8px 16px; /* Padding for button */
+    font-size: 16px; /* Font size */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer on hover */
+    display: flex; /* Flexbox to center the content */
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+    margin-right: 10px; /* Space between button and dropdown */
+}
+
+/* Back Button Hover State */
+.back-btn:hover {
+    background-color: #00ffff; /* Change to cyan on hover */
+    color: #000; /* Text color changes to black */
+    box-shadow: 0 4px 12px rgba(0, 255, 255, 0.5); /* Shadow effect on hover */
+    border-radius: 5px; /* Maintain same shape on hover */
+}
+
+/* Back Button Active State */
+.back-btn:active {
+    transform: scale(0.95); /* Slightly shrink on click */
+    box-shadow: none; /* Remove shadow when active */
+}
+
+/* Ensure text remains centered */
+.back-btn span {
+    display: flex; /* Use flexbox for span */
+    justify-content: center; /* Center text horizontally */
+    align-items: center; /* Center text vertically */
+}
+
+/* Additional Adjustments */
+.account-section {
+    display: flex; /* Flexbox for horizontal alignment */
+    align-items: center; /* Center vertically */
+}
+
+/* Navigation Links */
+.nav-links a {
+    color: white; /* Default text color */
+    text-decoration: none; /* Remove underline */
+    font-size: 18px; /* Font size */
+    border-radius: 5px; /* Rounded corners */
+    padding: 8px 16px; /* Padding for links */
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transition for effects */
+}
+
+/* Navigation Links Hover State */
+.nav-links a:hover {
+    background-color: cyan; /* Cyan background on hover */
+    color: black; /* Black text on hover */
+    transform: scale(1.1) translateY(-2px); /* Slightly elevate on hover */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5), 0 0 20px cyan; /* Shadow effect on hover */
+}
+.nav-links a:active {
+    transform: scale(0.95); /* Slightly shrink on click */
+    box-shadow: none; /* Remove shadow when active */
+}
+
+.dropdown-menu {
+    display: none; /* Hidden by default */
+    position: absolute; /* Absolute positioning */
+    right: 0; /* Align to the right */
+    background-color: #121212; /* Match the navbar background color */
+    border: 2px solid transparent; /* Initial transparent border for effect */
+    border-radius: 0; /* No rounding */
+    z-index: 1000; /* Ensure it appears above other content */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+    transition: border-color 0.5s; /* Transition for the border effect */
+    list-style-type: none; /* Remove default list dots */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-menu {
+    display: block; /* Show dropdown when hovered */
+    border-color: rgba(126, 253, 236, 0.8); /* Outline color for dropdown */
+    animation: neonEffect 1.5s infinite alternate; /* Apply the neon effect */
+}
+/*navbar css*/
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <span class="poly">POLY</span><span class="web">WEB</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="homepage.html">Home</a></li>
+                    <li><a href="games selection.html">Games</a></li>
+                    <li><a href="Content">Content</a></li>
+                </ul>
+                
+                <div class="account-section">
+                    <!-- Back Button -->
+                    <button class="back-btn" onclick="goBack()">
+                        <span><i class="fas fa-arrow-left"></i> Back</span>
+                    </button>
+        
+                <div class="dropdown">
+                    </button>
+                    <!-- Profile Image as Dropdown Toggle -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16" alt="O" class="dropdown-toggle" onclick="toggleDropdown()">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                      </svg>
+                
+                    <!-- Dropdown Menu -->
+                    <ul id="dropdownMenu" class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item-Logout" href="LOGIN PAGE.php" onclick="logout()">Logout</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div></div> <!-- Empty div to balance the flex layout -->
+        </div>
+    </header>
+
+    <main>
+        <div class="playground">
+            <div class="code-inputs">
+                <textarea class="html" id="html-input" placeholder="HTML"></textarea>
+                <textarea class="css" id="css-input" placeholder="CSS"></textarea>
+                <textarea class="js" id="js-input" placeholder="JavaScript"></textarea>
+            </div>
+            <button onclick="runCode()">Run Code</button>
+            <iframe class="OTS" id="output" title="Code Output"></iframe>
+        </div>
+
+        <aside class="sidebar">
+            <div class="card">
+                <h2>Objectives</h2>
+                <ul>
+                    <li>Create a functional button</li>
+                    <li>Change background color</li>
+                    <li>Create a simple form</li>
+                    <li>Implement a counter</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h2>Achievements</h2>
+                <div class="achievement">
+                    <h3>First Run</h3>
+                    <p>Ran your first code</p>
+                </div>
+                <div class="achievement">
+                    <h3>CSS Master</h3>
+                    <p>Used advanced CSS</p>
+                </div>
+                <div class="achievement">
+                    <h3>JavaScript Ninja</h3>
+                    <p>Implemented complex JS logic</p>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script src="CSS&JS/playground/script.js"> </script>
+</body>
+</html>

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Code Arrangement Game</title>
+    <style>
+        :root {
+            --primary-color: #00ffff;
+            --secondary-color: #00bcd4;
+            --background-color: #000000;
+            --text-color: #00ffff;
+            --border-color: #00ffff;
+            --card-background: #111111;
+            --button-hover: #00bcd4;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .game-container {
+            background-color: var(--card-background);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px auto;
+        }
+
+        h1 {
+            color: var(--text-color);
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .hint {
+            font-size: 1em;
+            color: var(--text-color);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .draggable {
+            padding: 8px 12px;
+            margin: 5px;
+            background-color: #222222;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: grab;
+            font-weight: bold;
+            color: var(--text-color);
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .draggable:hover,
+        .draggable:focus {
+            background-color: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        .drop-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 5px;
+            padding: 10px;
+            min-height: 50px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+            min-width: 300px;
+            transition: background-color 0.3s ease;
+        }
+
+        .drop-area.drag-over {
+            background-color: var(--secondary-color);
+        }
+
+        #submit-btn,
+        #submit-score-btn {
+            background-color: var(--primary-color);
+            color: rgb(0, 0, 0);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        #submit-btn:hover,
+        #submit-score-btn:hover {
+            background-color: var(--button-hover);
+        }
+
+        #result {
+            font-size: 1.2em;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        #score {
+            font-weight: bold;
+            color: var(--text-color);
+            margin-top: 15px;
+            font-size: 1.2em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #444444;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--primary-color);
+            transition: width 0.5s ease-in-out;
+        }
+
+        header {
+            background-color: black;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #121212;
+            padding: 15px 50px;
+            border: none;
+            border-radius: 20px;
+            height: 40px;
+            position: relative;
+            box-shadow: 0px 10px 15px rgba(0, 255, 255, 0.6);
+            border-bottom: 2px solid rgba(0, 255, 255, 0.8);
+        }
+
+        .navbar:hover {
+            box-shadow: 0px 4px 20px rgba(0, 255, 255, 1);
+            border-bottom: 2px solid rgba(0, 255, 255, 1);
+        }
+
+        .logo {
+            font-size: 24px;
+        }
+
+        .logo .poly {
+            color: white;
+            font-weight: bold;
+        }
+
+        .logo .web {
+            color: cyan;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            margin-left: 10rem;
+        }
+
+        .nav-links li {
+            margin: 0 20px;
+            margin-right: 100px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 8px 16px;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(0, 255, 255, 1);
+            color: black;
+            transform: scale(1.1) translateY(-2px);
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5), 0 0 20px cyan;
+        }
+
+        .nav-links a:active {
+            transform: scale(0.95);
+            box-shadow: none;
+        }
+
+        .account-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        .account-section img {
+            border: 2px solid #00ffff;
+            transition: transform 0.3s ease;
+        }
+
+        .account-section i {
+            color: white;
+            font-size: 30px;
+        }
+
+        .back-btn {
+            background-color: #121212;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .back-btn:hover {
+            background-color: #00ffff;
+            color: #000;
+            box-shadow: 0 4px 12px rgba(0, 255, 255, 0.5);
+        }
+
+        .back-btn:active {
+            transform: scale(0.95);
+            box-shadow: none;
+        }
+
+        .back-btn span {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #121212;
+            border: 2px solid transparent;
+            border-radius: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.5s;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            border-color: rgba(126, 253, 236, 0.8);
+            animation: neonEffect 1.5s infinite alternate;
+        }
+
+        .dropdown-item {
+            color: #ffffff;
+            padding: 5px 10px;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: block;
+            border-radius: 5px;
+        }
+
+        .dropdown-item-Logout {
+            color: #ffffff;
+            padding: 5px 10px;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: block;
+            border-radius: 5px;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(0, 8, 8, 0.575);
+            color: cyan;
+        }
+
+        .dropdown-item-Logout:hover {
+            background-color: rgb(255, 76, 91);
+            color: #121212;
+        }
+
+        @keyframes neonEffect {
+            from {
+                box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #00ffff, 0 0 35px #00ffff, 0 0 40px #00ffff, 0 0 50px #00ffff, 0 0 75px #00ffff;
+            }
+            to {
+                box-shadow: 0 0 2.5px #fff, 0 0 5px #fff, 0 0 7.5px #fff, 0 0 10px #00ffff, 0 0 17.5px #00ffff, 0 0 20px #00ffff, 0 0 25px #00ffff, 0 0 37.5px #00ffff;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 15px;
+            }
+
+            .nav-links {
+                margin-left: 0;
+                margin-top: 15px;
+                flex-direction: column;
+            }
+
+            .nav-links li {
+                margin: 10px 0;
+            }
+
+            .account-section {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <span class="poly">POLY</span><span class="web">WEB</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="homepage.html">Home</a></li>
+                    <li><a href="games selection.html">Games</a></li>
+                    <li><a href="Content">Content</a></li>
+                </ul>
+                
+                <div class="account-section">
+                    <button class="back-btn" onclick="goBack()">
+                        <span><i class="fas fa-arrow-left"></i> Back</span>
+                    </button>
+        
+                    <div class="dropdown">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16" alt="O" class="dropdown-toggle" onclick="toggleDropdown()">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                        </svg>
+                    
+                        <ul id="dropdownMenu" class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item-Logout" href="LOGIN PAGE.php" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <input type="hidden" id="user-id" value="<?php echo $_SESSION['user_id']; ?>">
+    <div class="game-container">
+        <h1>JavaScript Code Arrangement Game</h1>
+        <div id="question-container">
+            <p id="hint" class="hint"></p>
+            <p id="question-text">Arrange the code snippets correctly:</p>
+            <div id="snippets-container" class="draggables-container"></div>
+            <div id="drop-zone" class="drop-area" aria-label="Drop zone for code snippets"></div>
+            <button id="submit-btn">Check Answer</button>
+            <div id="result" aria-live="polite"></div>
+        </div>
+        <div id="score"></div>
+        <div class="progress-bar">
+            <div id="progress" class="progress"></div>
+        </div>
+        <button id="submit-score-btn" style="display:none;">Submit Score</button>
+    </div>
+
+    <script>
+        const questions = [
+            { hint: "Declare a variable num with value 10", order: ["let", "num", "=", "10;"] },
+            { hint: "Declare a constant val with value 5", order: ["const", "val", "=", "5;"] },
+            { hint: "Define a function named greet", order: ["function", "greet()", "{", "return", "'Hello';", "}"] },
+            { hint: "Assign the square of num to result", order: ["const", "result", "=", "num", "*", "num;"] },
+            { hint: "A for loop that iterates 10 times", order: ["for", "(let", "i", "=", "0;", "i", "<", "10;", "i++)", "{}"] },
+            { hint: "Create an array of numbers", order: ["const", "numbers", "=", "[1,", "2,", "3,", "4,", "5];"] },
+            { hint: "Use map to double each number in the array", order: ["const", "doubled", "=", "numbers.map(num", "=>", "num", "*", "2);"] },
+            { hint: "Define an arrow function that adds two numbers", order: ["const", "add", "=", "(a,", "b)", "=>", "a", "+", "b;"] },
+            { hint: "Use a ternary operator to check if a number is even", order: ["const", "isEven", "=", "num", "%", "2", "===", "0", "?", "true", ":", "false;"] },
+            { hint: "Create an object with name and age properties", order: ["const", "person", "=", "{", "name:", "'John',", "age:", "30", "};"] },
+            { hint: "Use object destructuring to extract name and age", order: ["const", "{", "name,", "age", "}", "=", "person;"] },
+            { hint: "Use a template literal to create a greeting", order: ["const", "greeting", "=", "`Hello,", "${name}!`"] },
+            { hint: "Create a Promise that resolves after 1 second", order: ["new", "Promise((resolve)", "=>", "{", "setTimeout(resolve,", "1000)", "})" ] },
+            { hint: "Use async/await to fetch data from an API", order: ["async", "function", "fetchData()", "{", "const", "response", "=", "await", "fetch(url);", "}"] },
+            { hint: "Use the spread operator to combine two arrays", order: ["const", "combined", "=", "[...arr1,", "...arr2];"] },
+            { hint: "Create a class named Person", order: ["class", "Person", "{", "constructor(name)", "{", "this.name", "=", "name;", "}", "}"] },
+            { hint: "Use the filter method to get even numbers", order: ["const", "evens", "=", "numbers.filter(num", "=>", "num", "%", "2", "===", "0);"] },
+            { hint: "Create a Set from an array", order: ["const", "uniqueSet", "=", "new", "Set(array);"] },
+            { hint: "Use Object.keys() to get object properties", order: ["const", "keys", "=", "Object.keys(person);"] },
+            { hint: "Create a Map with key-value pairs", order: ["const", "map", "=", "new", "Map([['key',", "'value']]);"] },
+            { hint: "Use the reduce method to sum an array", order: ["const", "sum", "=", "numbers.reduce((acc,", "num)", "=>", "acc", "+", "num,", "0);"] },
+            { hint: "Create a generator function", order: ["function*", "generator()", "{", "yield", "1;", "yield", "2;", "}"] },
+            { hint: "Use the optional chaining operator", order: ["const", "value", "=", "obj?.prop?.subProp;"] },
+            { hint: "Use the nullish coalescing operator", order: ["const", "result", "=", "value", "??", "'default';"] },
+            { hint: "Create a WeakMap", order: ["const", "weakMap", "=", "new", "WeakMap();"] },
+            { hint: "Use Object.assign() to merge objects", order: ["const", "merged", "=", "Object.assign({},", "obj1,", "obj2);"] },
+            { hint: "Use Array.from() to create an array", order: ["const", "array", "=", "Array.from('string');"] },
+            { hint: "Use the includes method to check array content", order: ["const", "hasValue", "=", "array.includes(5);"] },
+            { hint: "Create a Symbol", order: ["const", "sym", "=", "Symbol('description');"] },
+            { hint: "Use a switch statement", order: ["switch", "(value)", "{", "case", "1:", "break;", "default:", "break;", "}"] }
+        ];
+
+        const snippetsContainer = document.getElementById('snippets-container');
+        const dropZone = document.getElementById('drop-zone');
+        const hintDisplay = document.getElementById('hint');
+        const resultDisplay = document.getElementById('result');
+        const submitBtn = document.getElementById('submit-btn');
+        const submitScoreBtn = document.getElementById('submit-score-btn');
+        const scoreDisplay = document.getElementById('score');
+        const progressBar = document.getElementById('progress');
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            snippetsContainer.innerHTML = '';
+            dropZone.innerHTML = '';
+            resultDisplay.textContent = '';
+
+            if (currentQuestionIndex < questions.length) {
+                const currentQuestion = questions[currentQuestionIndex];
+                hintDisplay.textContent = "Hint: " + currentQuestion.hint;
+
+                const shuffledSnippets = [...currentQuestion.order].map((snippet, index) => {
+                    return { snippet: snippet, correctIndex: index };
+                }).sort(() => Math.random() - 0.5);
+
+                shuffledSnippets.forEach((item, index) => {
+                    const snippetElem = document.createElement('div');
+                    snippetElem.classList.add('draggable');
+                    snippetElem.textContent = item.snippet;
+                    snippetElem.setAttribute('data-correct-index', item.correctIndex);
+                    snippetElem.draggable = true;
+                    snippetElem.id = `snippet-${index}`;
+                    snippetElem.tabIndex = 0;
+
+                    snippetElem.addEventListener('dragstart', handleDragStart);
+                    snippetElem.addEventListener('keydown', handleKeyDown);
+
+                    snippetsContainer.appendChild(snippetElem);
+                });
+
+                updateProgressBar();
+            } else {
+                document.getElementById('question-container').style.display = 'none';
+                submitScoreBtn.style.display = 'block';
+                scoreDisplay.textContent = `Your final score: ${score} out of ${questions.length}`;
+            }
+        }
+
+        function handleDragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.id);
+        }
+
+        function handleKeyDown(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                const snippet = e.target;
+                if (snippet.parentElement === snippetsContainer) {
+                    dropZone.appendChild(snippet);
+                } else {
+                    snippetsContainer.appendChild(snippet);
+                }
+            }
+        }
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            const id = e.dataTransfer.getData('text');
+            const draggedElement = document.getElementById(id);
+            
+            if (draggedElement) {
+                dropZone.appendChild(draggedElement);
+            }
+        });
+
+        submitBtn.addEventListener('click', () => {
+            checkAnswer();
+            setTimeout(() => {
+                currentQuestionIndex++;
+                loadQuestion();
+            }, 1500);
+        });
+
+        function checkAnswer() {
+            const arrangedSnippets = Array.from(dropZone.children);
+            const currentQuestion = questions[currentQuestionIndex];
+
+            let isCorrect = arrangedSnippets.length === currentQuestion.order.length &&
+                arrangedSnippets.every((snippet, index) => 
+                    snippet.getAttribute('data-correct-index') == index
+                );
+
+            if (isCorrect) {
+                resultDisplay.textContent = 'Correct! Well done.';
+                resultDisplay.style.color = 'green';
+                score++;
+            } else {
+                resultDisplay.textContent = 'Incorrect. Moving to the next question...';
+                resultDisplay.style.color = 'red';
+            }
+            
+            scoreDisplay.textContent = `Score: ${score} / ${currentQuestionIndex + 1}`;
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        submitScoreBtn.addEventListener('click', () => {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'submit_dataAC.php';
+
+            const scoreInput = document.createElement('input');
+            scoreInput.type = 'hidden';
+            scoreInput.name = 'score';
+            scoreInput.value = score;
+
+            form.appendChild(scoreInput);
+            document.body.appendChild(form);
+            form.submit();
+        });
+
+        function submitScoreToServer(score) {
+            const formData = new FormData();
+            formData.append('score', score);
+
+            fetch('submit_dataAC.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Score submitted successfully:', data);
+            })
+            .catch(error => {
+                console.error('Error submitting score:', error);
+            });
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function toggleDropdown() {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function logout() {
+            // Add your logout logic here
+            console.log('Logout clicked');
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>

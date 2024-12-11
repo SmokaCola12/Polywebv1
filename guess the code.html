@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Code</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: #000000;
+            color: #00ffff;
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+        
+        header {
+            background-color: black;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #121212;
+            padding: 15px 50px;
+            border: none;
+            border-radius: 20px;
+            height: 70px;
+            position: relative;
+            box-shadow: 0px 10px 15px rgba(0, 255, 255, 0.6);
+            border-bottom: 2px solid rgba(0, 255, 255, 0.8);
+        }
+
+        .navbar:hover {
+            box-shadow: 0px 4px 20px rgba(0, 255, 255, 1);
+            border-bottom: 2px solid rgba(0, 255, 255, 1);
+        }
+
+        .logo {
+            font-size: 24px;
+        }
+
+        .logo .poly {
+            color: white;
+            font-weight: bold;
+        }
+
+        .logo .web {
+            color: cyan;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            margin-left: 10rem;
+        }
+
+        .nav-links li {
+            margin: 0 20px;
+            margin-right: 100px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 8px 16px;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(0, 255, 255, 1);
+            color: black;
+            transform: scale(1.1) translateY(-2px);
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5), 0 0 20px cyan;
+        }
+
+        .nav-links a:active {
+            transform: scale(0.95);
+            box-shadow: none;
+        }
+
+        .account-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        .account-section img {
+            border: 2px solid #00ffff;
+            transition: transform 0.3s ease;
+        }
+
+        .account-section i {
+            color: white;
+            font-size: 30px;
+        }
+
+        .back-btn {
+            background-color: #121212;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 3px;
+        }
+
+        .back-btn:hover {
+            background-color: #00ffff;
+            color: #000;
+            box-shadow: 0 4px 12px rgba(0, 255, 255, 0.5);
+        }
+
+        .back-btn:active {
+            transform: scale(0.95);
+            box-shadow: none;
+        }
+
+        .back-btn span {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #121212;
+            border: 2px solid transparent;
+            border-radius: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.5s;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            border-color: rgba(126, 253, 236, 0.8);
+            animation: neonEffect 1.5s infinite alternate;
+        }
+
+        .dropdown-item {
+            color: #ffffff;
+            padding: 5px 10px;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: block;
+            border-radius: 5px;
+        }
+
+        .dropdown-item-Logout {
+            color: #ffffff;
+            padding: 5px 10px;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: block;
+            border-radius: 5px;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(0, 8, 8, 0.575);
+            color: cyan;
+        }
+
+        .dropdown-item-Logout:hover {
+            background-color: rgb(255, 76, 91);
+            color: #121212;
+        }
+
+        @keyframes neonEffect {
+            from {
+                box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #00ffff, 0 0 35px #00ffff, 0 0 40px #00ffff, 0 0 50px #00ffff, 0 0 75px #00ffff;
+            }
+            to {
+                box-shadow: 0 0 2.5px #fff, 0 0 5px #fff, 0 0 7.5px #fff, 0 0 10px #00ffff, 0 0 17.5px #00ffff, 0 0 20px #00ffff, 0 0 25px #00ffff, 0 0 37.5px #00ffff;
+            }
+        }
+
+        #game-container {
+            max-width: 800px;
+            margin: 40px auto;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            font-weight: bold;
+            text-shadow: 2px 2px 8px rgba(0, 255, 255, 0.3);
+            margin-top: 250PX;
+        }
+        
+        #word-container {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            font-weight: bold;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        #level-select {
+            margin: 20px 0;
+        }
+        
+        #level-select button {
+            background-color: #00ffff;
+            border: none;
+            color: #000000;
+            padding: 12px 24px;
+            font-size: 1rem;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        #level-select button:hover {
+            background-color: #00cccc;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+        }
+        
+        #timer-container {
+            width: 100%;
+            max-width: 400px;
+            height: 10px;
+            background-color: #333333;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 20px auto;
+        }
+        
+        #timer-progress {
+            height: 100%;
+            background-color: #00ffff;
+            width: 100%;
+            transition: width 1s linear;
+        }
+        
+        #message {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #00ffff;
+            font-weight: bold;
+        }
+        
+        #game-content {
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        #game-content.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        #input {
+            background-color: #1e1e1e;
+            color: #00ffff;
+            width: 50%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 2px solid #00ffff;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        #input:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+        
+        button {
+            background-color: #00ffff;
+            color: #000000;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            margin-top: 6px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #00cccc;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+        }
+        
+        #score {
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 15px;
+            }
+
+            .nav-links {
+                margin-left: 0;
+                margin-top: 15px;
+                flex-direction: column;
+            }
+
+            .nav-links li {
+                margin: 10px 0;
+            }
+
+            .account-section {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <span class="poly">POLY</span><span class="web">WEB</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="homepage.html">Home</a></li>
+                    <li><a href="games selection.html">Games</a></li>
+                    <li><a href="Content">Content</a></li>
+                </ul>
+                <div class="account-section">
+                    <button class="back-btn" onclick="goBack()">
+                        Back
+                    </button>
+                    <div class="dropdown">
+                        <i class="fas fa-user-circle"></i>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" class="dropdown-item">Profile</a></li>
+                            <li><a href="LOGIN PAGE.php" class="dropdown-item-Logout">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div id="game-container">
+        <h1>Guess the Code</h1>
+        
+        <div id="level-select">
+            <button onclick="selectLevel('easy')">Easy</button>
+            <button onclick="selectLevel('moderate')">Moderate</button>
+            <button onclick="selectLevel('hard')">Hard</button>
+        </div>
+
+        <div id="game-content" class="hidden">
+            <div id="word-container"></div>
+            <input type="text" id="input" placeholder="Type here..." autofocus>
+            <div id="score">Score: 0</div>
+            <div id="timer-container">
+                <div id="timer-progress"></div>
+            </div>
+            <div id="message"></div>
+            <button id="hint-button" onclick="showHint()">Show Hint</button>
+            <button id="try-again-button" class="hidden" onclick="tryAgain()">Try Again</button>
+            <button id="change-level-button" class="hidden" onclick="submitScore()">Submit Score</button>
+        </div>
+    </div>
+
+    <script>
+        const codeSnippets = {
+            easy: [
+                { snippet: 'const x = 5;', answer: 'variable declaration' },
+                { snippet: 'let name = "John";', answer: 'variable' },
+                { snippet: 'function greet() { return "Hello"; }', answer: 'function' },
+                { snippet: 'let arr = [1, 2, 3];', answer: 'array' },
+                { snippet: 'const obj = { key: "value" };', answer: 'object' },
+                { snippet: 'Promise.resolve()', answer: 'promise' },
+                { snippet: 'console.log("Hello");', answer: 'console log' },
+                { snippet: 'const x = true;', answer: 'boolean' },
+                { snippet: 'let y = null;', answer: 'null' },
+                { snippet: 'const z = undefined;', answer: 'undefined' },
+            ],
+            moderate: [
+                { snippet: 'async function fetchData() { }', answer: 'async function' },
+                { snippet: 'try { } catch (error) { }', answer: 'try catch' },
+                { snippet: 'document.querySelector("div")', answer: 'query selector' },
+                { snippet: 'Math.max(1, 2, 3)', answer: 'math max' },
+                { snippet: 'if (true) { }', answer: 'if statement' },
+                { snippet: 'for (let i = 0; i < 5; i++) { }', answer: 'for loop' },
+                { snippet: 'switch(x) { case 1: break; }', answer: 'switch case' },
+                { snippet: 'x ? y : z', answer: 'ternary operator' },
+                { snippet: 'let mySet = new Set();', answer: 'set' },
+                { snippet: 'let myMap = new Map();', answer: 'map' }
+            ],
+            hard: [
+                { snippet: '(() => { console.log("IIFE"); })();', answer: 'iife' },
+                { snippet: '[1, 2, 3].map(x => x * 2)', answer: 'array map' },
+                { snippet: 'const p = new Promise((resolve, reject) => {});', answer: 'promise' },
+                { snippet: 'const sym = Symbol("desc");', answer: 'symbol' },
+                { snippet: 'import { module } from "module";', answer: 'import statement' },
+                { snippet: 'export default function() { }', answer: 'export default' },
+                { snippet: 'class MyClass { constructor() { } }', answer: 'class' },
+                { snippet: 'const regex = /abc/g;', answer: 'regex' },
+                { snippet: 'const res = await fetch("/api");', answer: 'fetch' },
+                { snippet: 'Object.assign({}, obj);', answer: 'object assign' }
+            ]
+        };
+
+        let currentSnippet = {};
+        let previousSnippet = {};
+        let score = 0;
+        let timer;
+        let timeLimit;
+        let timeLeft;
+        let currentLevel = '';
+        let timerActive = false;
+        let gameEnded = false;
+
+        const correctSound = new Audio('MP3/correct.mp3');
+        const gameoverSound = new Audio('MP3/gameover.mp3');
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function selectLevel(level) {
+            currentLevel = level;
+            document.getElementById('level-select').style.display = 'none';
+            const gameContent = document.getElementById('game-content');
+            gameContent.classList.remove('hidden');
+            gameContent.classList.add('show');
+
+            setTimeLimit(level);
+            startGame(level);
+        }
+
+        function setTimeLimit(level) {
+            if (level === 'easy') {
+                timeLimit = 10;
+            } else if (level === 'moderate') {
+                timeLimit = 8;
+            } else if (level === 'hard') {
+                timeLimit = 5;
+            }
+        }
+
+        function startGame(level) {
+            score = 0;
+            document.getElementById('score').innerText = `Score: ${score}`;
+            document.getElementById('input').value = '';
+            document.getElementById('input').disabled = false;
+            document.getElementById('input').focus();
+
+            gameEnded = false;
+            document.getElementById('hint-button').classList.remove('hidden');
+            document.getElementById('try-again-button').classList.add('hidden');
+            document.getElementById('change-level-button').classList.add('hidden');
+            
+            resetTimer();
+            generateSnippet(level);
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            timeLeft = timeLimit;
+            document.getElementById('timer-progress').style.width = '100%';
+            timerActive = true;
+            updateTimer();
+        }
+
+        function updateTimer() {
+            timer = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    const percentage = (timeLeft / timeLimit) * 100;
+                    document.getElementById('timer-progress').style.width = percentage + '%';
+                } else {
+                    clearInterval(timer);
+                    timerActive = false;
+                    document.getElementById('timer-progress').style.width = '0%';
+                    handleTimeUp();
+                }
+            }, 1000);
+        }
+
+        function handleTimeUp() {
+            if (gameEnded) return;
+            gameEnded = true;
+            document.getElementById('input').disabled = true;
+            showAnswer();
+            gameoverSound.play();
+            document.getElementById('message').innerText = `Time's up! Correct answer: ${currentSnippet.answer}. Try again?`;
+            document.getElementById('hint-button').classList.add('hidden');
+            document.getElementById('try-again-button').classList.remove('hidden');
+            document.getElementById('change-level-button').classList.remove('hidden');
+        }
+
+        function generateSnippet(level) {
+            if (gameEnded) return;
+
+            const snippets = codeSnippets[level];
+            let randomIndex;
+
+            do {
+                randomIndex = Math.floor(Math.random() * snippets.length);
+            } while (snippets[randomIndex] === previousSnippet);
+
+            currentSnippet = snippets[randomIndex];
+            previousSnippet = currentSnippet;
+            document.getElementById('word-container').innerText = currentSnippet.snippet;
+            document.getElementById('message').innerText = '';
+        }
+
+        function showAnswer() {
+            document.getElementById('message').innerText = `Correct answer: ${currentSnippet.answer}`;
+        }
+
+        document.getElementById('input').addEventListener('input', function () {
+            if (gameEnded) return;
+
+            if (this.value.trim().toLowerCase() === currentSnippet.answer.toLowerCase()) {
+                correctSound.play();
+                score++;
+                document.getElementById('score').innerText = `Score: ${score}`;
+                this.value = '';
+
+                clearInterval(timer);
+                document.getElementById('timer-progress').style.width = '100%';
+                resetTimer();
+                generateSnippet(currentLevel);
+            }
+        });
+
+        function showHint() {
+            document.getElementById('message').innerText = `Hint: ${currentSnippet.answer.slice(0, 2)}...`;
+        }
+
+        function tryAgain() {
+            document.getElementById('try-again-button').classList.add('hidden');
+            document.getElementById('change-level-button').classList.add('hidden');
+            document.getElementById('hint-button').classList.remove('hidden');
+            startGame(currentLevel);
+        }
+
+        function submitScore() {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'submit_data_gc.php';
+
+            const scoreInput = document.createElement('input');
+            scoreInput.type = 'hidden';
+            scoreInput.name = 'score';
+            scoreInput.value = score;
+
+            const gameModeInput = document.createElement('input');
+            gameModeInput.type = 'hidden';
+            gameModeInput.name = 'game_mode';
+            gameModeInput.value = currentLevel;
+
+            form.appendChild(scoreInput);
+            form.appendChild(gameModeInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+</body>
+</html>
